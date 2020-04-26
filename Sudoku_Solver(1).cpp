@@ -7,6 +7,8 @@ const int N=10;
 bool lin[N][N],col[N][N],chenar[N][N],marcat[N][N];
 int patrat[N][N],mat[N][N];
 
+//function that finds the next empty square
+
 bool next(int &i, int &j)
 {
   for (i=1;i<=9;i++)
@@ -16,7 +18,9 @@ bool next(int &i, int &j)
   return 0;
 }
 
-void calculare_patrat()
+//function that computes, for each (i,j) pair, the respective grid
+
+void grid_computation()
 {
   int i,j;  
   for (i=1;i<=3;i++)
@@ -48,12 +52,16 @@ void calculare_patrat()
   }
 }
 
-bool se_poate(int i, int j, int a)
+//function that returns 1 if, by completing the square at (i,j) with digit a, the rules are still followed
+
+bool is_possible(int i, int j, int a)
 {
   if (lin[i][a]==1||col[j][a]==1||chenar[patrat[i][j]][a]==1)
     return 0;
   return 1;
 }
+
+//backtracking funtion that solves each square, one by one
 
 bool ok()
 {
@@ -62,7 +70,7 @@ bool ok()
     return 1;
   for (int k=1;k<=9;k++)
   {
-    if (se_poate(i,j,k))
+    if (is_possible(i,j,k))
     {
       mat[i][j]=k,lin[i][k]=1,col[j][k]=1,chenar[patrat[i][j]][k]=1;
       if (ok())
@@ -73,12 +81,14 @@ bool ok()
   return 0;
 }
 
+//main function
+
 int main()
 {
   cout<<"Hey! This little program can solve any classic Sudoku in a short amount of time. In order to get it to work, you'll have to manually type the given sudoku in the following way: \n If a digit is given, you may write it as it is. \n If the digit is not given, write a 0 in its place. \n \n Have fun! \n \n";  
   int a;
   bool finish=0;
-  calculare_patrat();
+  grid_computation();
   for (int i=1;i<=9;i++)
     for (int j=1;j<=9;j++)
     {
@@ -86,12 +96,6 @@ int main()
       if (a)
         marcat[i][j]=1,mat[i][j]=a,lin[i][a]=1,col[j][a]=1,chenar[patrat[i][j]][a]=1;
     }
-  for (int i=1;i<=9;i++)
-  {
-    for (int j=1;j<=9;j++)
-      cout<<mat[i][j]<<" ";
-    cout<<'\n';
-  }
   cout<<'\n';
   if (ok())
   {
